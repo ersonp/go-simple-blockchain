@@ -24,4 +24,5 @@ func run(httpPort int) {
 
 	// Start serving the application
 	log.Fatal(server.Router.Run(":" + strconv.Itoa(httpPort)))
+	log.Println("HTTP Server Listening on port :", httpPort)
 }

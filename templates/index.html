@@ -2,14 +2,65 @@
 
 <!--Embed the header.html template at this location-->
 {{ template "header.html" .}}
-  {{range .payload }}
-    <!--Create the link for the article based on its ID-->
-    <a href="/article/view/{{.ID}}">
-      <!--Display the title of the article -->
-      <h2>{{.Title}}</h2>
-    </a>
-    <!--Display the content of the article-->
-    <p>{{.Content}}</p>
-  {{end}}
+    <div class="page-wrapper">
+        <!-- MENU MOBILE-->
+        {{ template "menu-mobile.html" . }}
+        
+        <!-- END MENU MOBILE-->
+
+        <!-- MENU SIDEBAR-->
+        {{ template "sidebar.html" . }}
+        
+        <!-- END MENU SIDEBAR-->
+
+        <!-- PAGE CONTAINER-->
+        <div class="page-container">
+            <!-- MENU DESKTOP-->
+            {{ template "menu.html" . }}
+            
+            <!-- MENU DESKTOP-->
+
+            <!-- MAIN CONTENT-->
+            <div class="main-content">
+                <div class="section__content section__content--p30">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="overview-wrap">
+                                    <h2 class="title-1">Blockchain</h2>
+                                    <button class="au-btn au-btn-icon au-btn--blue">
+                                        <i class="zmdi zmdi-plus"></i>add block</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="overview-item overview-item--c1">
+                                    <div class="overview__inner">
+                                        <div class="overview-box clearfix">
+                                            <div class="icon">
+                                                <i class="zmdi zmdi-account-o"></i>
+                                            </div>
+                                            <div class="text">
+                                                <h2>10368</h2>
+                                                <span>members online</span>
+                                            </div>
+                                        </div>
+                                        <div class="overview-chart">
+                                            <canvas id="widgetChart1"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END MAIN CONTENT-->
+            <!-- END PAGE CONTAINER-->
+        </div>
+
+    </div>
+
 <!--Embed the footer.html template at this location-->
 {{ template "footer.html" .}}

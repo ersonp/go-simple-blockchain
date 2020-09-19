@@ -1,29 +1,21 @@
-<!--menu.html-->
-
-<nav class="navbar navbar-default">
-  <div class="container">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="/">
-        Home
-      </a>
-    </div>
-    <ul class="nav navbar-nav">
-      {{ if .is_logged_in }}
-        <!--Display this link only when the user is logged in-->
-        <li><a href="/article/create">Create Article</a></li>
-      {{end}} 
-      {{ if not .is_logged_in }}
-        <!--Display this link only when the user is not logged in-->
-        <li><a href="/u/register">Register</a></li>
-      {{end}} 
-      {{ if not .is_logged_in }}
-        <!--Display this link only when the user is not logged in-->
-        <li><a href="/u/login">Login</a></li>
-      {{end}} 
-      {{ if .is_logged_in }}
-        <!--Display this link only when the user is logged in-->
-        <li><a href="/u/logout">Logout</a></li>
-      {{end}}
-    </ul>
+<header class="header-desktop">
+  <div class="section__content section__content--p30">
+      <div class="container-fluid">
+          <div class="header-wrap">
+              <form class="form-header" action="" method="POST">
+                  <input class="au-input au-input--xl" type="text" name="search" placeholder="Search for datas &amp; reports..." />
+                  <button class="au-btn--submit" type="submit">
+                      <i class="zmdi zmdi-search"></i>
+                  </button>
+              </form>
+              <div class="header-button">
+                  <div class="noti-wrap">
+                      <div class="noti__item js-item-menu">
+                          <i class="zmdi zmdi-comment-more"></i>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
   </div>
-</nav>
+</header>
