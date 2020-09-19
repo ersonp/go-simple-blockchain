@@ -118,5 +118,7 @@ func main() {
 
 	httpPort := *listenF + 1000
 	// run the gorilla/mux server
-	log.Fatal(run(httpPort))
+	// log.Fatal()
+	run(httpPort)
+	select {}
 }

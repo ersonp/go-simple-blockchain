@@ -2,6 +2,9 @@ module github.com/ersonp/go-simple-blockchain
 
 require (
 	github.com/davecgh/go-spew v1.1.1
+	github.com/ersonp/go-resume v0.0.3
+	github.com/gin-contrib/static v0.0.0-20191128031702-f81c604d8ac2
+	github.com/gin-gonic/gin v1.6.3-0.20200408153131-4f208887e123
 	github.com/gogo/protobuf v1.3.1
 	github.com/google/uuid v1.1.1
 	github.com/gorilla/mux v1.8.0

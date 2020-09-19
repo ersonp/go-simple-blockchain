@@ -1,87 +1,27 @@
 package main
 
 import (
-	"encoding/json"
-	"io"
 	"log"
-	"net/http"
 	"strconv"
-	"time"
 
-	"github.com/davecgh/go-spew/spew"
-	"github.com/gorilla/mux"
+	"github.com/ersonp/go-simple-blockchain/server"
+	"github.com/gin-gonic/gin"
 )
 
-// web server
-func run(httpPort int) error {
-	mux := makeMuxRouter()
-	log.Println("HTTP Server Listening on port :", httpPort)
-	s := &http.Server{
-		Addr:           ":" + strconv.Itoa(httpPort),
-		Handler:        mux,
-		ReadTimeout:    10 * time.Second,
-		WriteTimeout:   10 * time.Second,
-		MaxHeaderBytes: 1 << 20,
-	}
+func run(httpPort int) {
+	// Set Gin to production mode
+	gin.SetMode(gin.ReleaseMode)
 
-	if err := s.ListenAndServe(); err != nil {
-		return err
-	}
+	// Set the router as the default one provided by Gin
+	server.Router = gin.Default()
 
-	return nil
-}
+	// Process the templates at the start so that they don't have to be loaded
+	// from the disk again. This makes serving HTML pages very fast.
+	server.Router.LoadHTMLGlob("templates/*")
 
-// create handlers
-func makeMuxRouter() http.Handler {
-	muxRouter := mux.NewRouter()
-	muxRouter.HandleFunc("/", handleGetBlockchain).Methods("GET")
-	muxRouter.HandleFunc("/", handleWriteBlock).Methods("POST")
-	return muxRouter
-}
+	// Initialize the routes
+	server.InitializeRoutes()
 
-// write blockchain when we receive an http request
-func handleGetBlockchain(w http.ResponseWriter, r *http.Request) {
-	bytes, err := json.MarshalIndent(Blockchain, "", "  ")
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	io.WriteString(w, string(bytes))
-}
-
-// takes JSON payload as an input for heart rate (BPM)
-func handleWriteBlock(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	var msg Message
-
-	decoder := json.NewDecoder(r.Body)
-	if err := decoder.Decode(&msg); err != nil {
-		respondWithJSON(w, r, http.StatusBadRequest, r.Body)
-		return
-	}
-	defer r.Body.Close()
-
-	mutex.Lock()
-	prevBlock := Blockchain[len(Blockchain)-1]
-	newBlock := generateBlock(prevBlock, msg.BPM)
-
-	if isBlockValid(newBlock, prevBlock) {
-		Blockchain = append(Blockchain, newBlock)
-		spew.Dump(Blockchain)
-	}
-	mutex.Unlock()
-
-	respondWithJSON(w, r, http.StatusCreated, newBlock)
-
-}
-
-func respondWithJSON(w http.ResponseWriter, r *http.Request, code int, payload interface{}) {
-	response, err := json.MarshalIndent(payload, "", "  ")
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("HTTP 500: Internal Server Error"))
-		return
-	}
-	w.WriteHeader(code)
-	w.Write(response)
+	// Start serving the application
+	log.Fatal(server.Router.Run(":" + strconv.Itoa(httpPort)))
 }
