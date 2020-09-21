@@ -24,6 +24,12 @@ func InitializeRoutes() {
 
 	Router.GET("/home", handlers.ShowHomePage)
 
+	Router.GET("/addblock", handlers.ShowAddBlockPage)
+
+	Router.GET("/nodeinfo", handlers.ShowNodeInfoPage)
+
+	Router.GET("/login", handlers.ShowLoginPage)
+
 	// Group user related routes together
 	userRoutes := Router.Group("/u")
 	{

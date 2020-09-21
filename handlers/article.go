@@ -17,8 +17,28 @@ func ShowIndexPage(c *gin.Context) {
 
 	// Call the render function with the name of the template to render
 	common.Render(c, gin.H{
-		"title":   "Home Page",
+		"title":   "Blockchain Page",
 		"payload": articles}, "index.html")
+}
+
+// ShowAddBlockPage used to show the index page
+func ShowAddBlockPage(c *gin.Context) {
+	articles := models.GetAllArticles()
+
+	// Call the render function with the name of the template to render
+	common.Render(c, gin.H{
+		"title":   "Add Block Page",
+		"payload": articles}, "addblock.html")
+}
+
+// ShowNodeInfoPage used to show the index page
+func ShowNodeInfoPage(c *gin.Context) {
+	articles := models.GetAllArticles()
+
+	// Call the render function with the name of the template to render
+	common.Render(c, gin.H{
+		"title":   "Node Info Page",
+		"payload": articles}, "nodeinfo.html")
 }
 
 // ShowArticleCreationPage Show article creation page
