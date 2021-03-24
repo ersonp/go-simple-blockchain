@@ -22,4 +22,4 @@ Here the blocks are now added via the API made in gorilla/mux removing the input
 
 ### v0.2.2
 
-The gorilla/mux API implimentation is dropped and is replaced with go/gin webserver with a UI.  
+The gorilla/mux API implementation is dropped and is replaced with go/gin webserver with a UI.  
