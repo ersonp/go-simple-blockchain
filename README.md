@@ -19,3 +19,7 @@ Here the blocks are added via the command prompt and the gorilla/mux code is not
 ### v0.2.1
 
 Here the blocks are now added via the API made in gorilla/mux removing the input capability from the terminal hereafter. There is still no consensus algorithm. The node simply adds a block to it's blockchain and shares it's copy to other nodes where the other nodes simply compare the lenth of their blockchain and the recieved one and replace it with the longest.
+
+### v0.2.2
+
+The gorilla/mux API implimentation is dropped and is replaced with go/gin webserver with a UI.  
