@@ -1,0 +1,64 @@
+<!--index.html-->
+
+<!--Embed the header.html template at this location-->
+{{ template "header.html" .}}
+    <div class="page-wrapper">
+        <!-- HEADER MOBILE-->
+        {{ template "menu-mobile.html" . }}
+        <!-- END HEADER MOBILE-->
+
+        <!-- MENU SIDEBAR-->
+        {{ template "sidebar.html" . }}
+        <!-- END MENU SIDEBAR-->
+
+        <!-- PAGE CONTAINER-->
+        <div class="page-container">
+            <!-- HEADER DESKTOP-->
+            {{ template "menu.html" . }}
+            <!-- HEADER DESKTOP-->
+
+            <!-- MAIN CONTENT-->
+            <div class="main-content">
+                <div class="section__content section__content--p30">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="card">
+                                    <div class="card-header">Add Block</div>
+                                    <p class="bg-danger">
+                                        {{.ErrorMessage}}
+                                    </p>
+                                    <div class="card-body card-block">
+                                        <form action="/add" method="POST" class="">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-asterisk"></i>
+                                                    </div>
+                                                    <input type="text" id="bpm" name="bpm" placeholder="BPM" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="form-actions form-group">
+                                                <button type="submit" class="btn btn-success btn-sm">Validate</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="copyright">
+                                    <p>Copyright © 2018 Colorlib. All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+<!--Embed the footer.html template at this location-->
+{{ template "footer.html" .}}
