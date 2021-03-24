@@ -7,7 +7,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/ersonp/go-resume/common"
+	"github.com/ersonp/go-simple-blockchain/pkg/common"
 	"github.com/gin-gonic/gin"
 )
 

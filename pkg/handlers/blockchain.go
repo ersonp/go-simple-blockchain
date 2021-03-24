@@ -3,8 +3,8 @@
 package handlers
 
 import (
-	bc "github.com/ersonp/go-simple-blockchain/blockchain"
-	"github.com/ersonp/go-simple-blockchain/common"
+	bc "github.com/ersonp/go-simple-blockchain/pkg/blockchain"
+	"github.com/ersonp/go-simple-blockchain/pkg/common"
 	"github.com/gin-gonic/gin"
 )
 

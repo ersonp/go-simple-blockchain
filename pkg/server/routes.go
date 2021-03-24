@@ -1,8 +1,8 @@
 package server
 
 import (
-	"github.com/ersonp/go-simple-blockchain/handlers"
-	"github.com/ersonp/go-simple-blockchain/middlewares"
+	"github.com/ersonp/go-simple-blockchain/pkg/handlers"
+	"github.com/ersonp/go-simple-blockchain/pkg/middlewares"
 	"github.com/gin-gonic/gin"
 )
 

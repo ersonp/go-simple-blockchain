@@ -18,6 +18,8 @@ import (
 	net "github.com/libp2p/go-libp2p-core/network"
 	"github.com/libp2p/go-libp2p-core/peer"
 	pstore "github.com/libp2p/go-libp2p-core/peerstore"
+	"github.com/libp2p/go-libp2p-core/routing"
+	dht "github.com/libp2p/go-libp2p-kad-dht"
 	ma "github.com/multiformats/go-multiaddr"
 )
 
@@ -49,7 +51,8 @@ var PeerMetrics []Metrics
 // MakeBasicHost creates a LibP2P host with a random peer ID listening on the
 // given multiaddress. It will use secio if secio is true.
 func MakeBasicHost(listenPort int, secio bool, randseed int64) (host.Host, error) {
-
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 	var a Address
 	// If the seed is zero, use real cryptographic randomness. Otherwise, use a
 	// deterministic randomness source to make generated keys stay the same
@@ -71,9 +74,16 @@ func MakeBasicHost(listenPort int, secio bool, randseed int64) (host.Host, error
 	opts := []libp2p.Option{
 		libp2p.ListenAddrStrings(fmt.Sprintf("/ip4/127.0.0.1/tcp/%d", listenPort)),
 		libp2p.Identity(priv),
+		libp2p.DefaultTransports,
+		// Let this host use the DHT to find other hosts
+		libp2p.Routing(func(h host.Host) (routing.PeerRouting, error) {
+			idht, err := dht.New(ctx, h)
+			return idht, err
+		}),
+		libp2p.EnableAutoRelay(),
 	}
 
-	basicHost, err := libp2p.New(context.Background(), opts...)
+	basicHost, err := libp2p.New(ctx, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -199,7 +209,7 @@ func ConnectPeer(ha host.Host, target string) {
 		log.Fatalln(err)
 	}
 
-	peerid, err := peer.IDB58Decode(pid)
+	peerid, err := peer.Decode(pid)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -207,7 +217,7 @@ func ConnectPeer(ha host.Host, target string) {
 	// Decapsulate the /ipfs/<peerID> part from the target
 	// /ip4/<a.b.c.d>/ipfs/<peer> becomes /ip4/<a.b.c.d>
 	targetPeerAddr, _ := ma.NewMultiaddr(
-		fmt.Sprintf("/ipfs/%s", peer.IDB58Encode(peerid)))
+		fmt.Sprintf("/ipfs/%s", peer.Encode(peerid)))
 	targetAddr := ipfsaddr.Decapsulate(targetPeerAddr)
 
 	// We have a peer ID and a targetAddr so we add it to the peerstore

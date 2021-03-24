@@ -5,7 +5,8 @@ import (
 	"log"
 	"time"
 
-	bc "github.com/ersonp/go-simple-blockchain/blockchain"
+	bc "github.com/ersonp/go-simple-blockchain/pkg/blockchain"
+	"github.com/ersonp/go-simple-blockchain/pkg/server"
 	golog "github.com/ipfs/go-log"
 	gologging "github.com/whyrusleeping/go-logging"
 )
@@ -56,6 +57,9 @@ func main() {
 
 	httpPort := *listenF + 1000
 	// run the gorilla/mux server
-	run(httpPort)
+	server.Run(httpPort)
 	// select {}
 }
+
+// possible swarmish upgrade
+// https://github.com/libp2p/go-libp2p-examples/blob/master/routed-echo
