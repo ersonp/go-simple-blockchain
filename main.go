@@ -1,47 +1,27 @@
 package main
 
 import (
-	"bufio"
-	"context"
 	"flag"
-	"fmt"
 	"log"
-	"sync"
 	"time"
 
+	bc "github.com/ersonp/go-simple-blockchain/blockchain"
 	golog "github.com/ipfs/go-log"
-	peer "github.com/libp2p/go-libp2p-core/peer"
-	pstore "github.com/libp2p/go-libp2p-core/peerstore"
-	ma "github.com/multiformats/go-multiaddr"
 	gologging "github.com/whyrusleeping/go-logging"
 )
 
-// Block represents each 'item' in the blockchain
-type Block struct {
-	Index     int
-	Timestamp string
-	BPM       int
-	Hash      string
-	PrevHash  string
-}
-
-// Blockchain is a series of validated Blocks
-var Blockchain []Block
-
-// Message to recieve data
-// TODO: change comment later
-type Message struct {
-	BPM int
-}
-
-var mutex = &sync.Mutex{}
-
 func main() {
 	t := time.Now()
-	genesisBlock := Block{}
-	genesisBlock = Block{0, t.String(), 0, calculateHash(genesisBlock), ""}
+	genesisBlock := bc.Block{}
+	genesisBlock = bc.Block{
+		Index:     0,
+		Timestamp: t.String(),
+		BPM:       0,
+		Hash:      bc.CalculateHash(genesisBlock),
+		PrevHash:  "",
+	}
 
-	Blockchain = append(Blockchain, genesisBlock)
+	bc.Blockchain = append(bc.Blockchain, genesisBlock)
 
 	// LibP2P code uses golog to log messages. They log with different
 	// string IDs (i.e. "swarm"). We can control the verbosity level for
@@ -55,12 +35,8 @@ func main() {
 	seed := flag.Int64("seed", 0, "set random seed for id generation")
 	flag.Parse()
 
-	// if *listenF == 0 {
-	// 	log.Fatal("Please provide a port to bind on with -l")
-	// }
-
 	// Make a host that listens on the given multiaddress
-	ha, err := makeBasicHost(*listenF, *secio, *seed)
+	ha, err := bc.MakeBasicHost(*listenF, *secio, *seed)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -69,56 +45,17 @@ func main() {
 		log.Println("listening for connections")
 		// Set a stream handler on host A. /p2p/1.0.0 is
 		// a user-defined protocol name.
-		ha.SetStreamHandler("/p2p/1.0.0", handleStream)
+		ha.SetStreamHandler("/p2p/1.0.0", bc.HandleStream)
 
 	} else {
-		ha.SetStreamHandler("/p2p/1.0.0", handleStream)
+		ha.SetStreamHandler("/p2p/1.0.0", bc.HandleStream)
 
-		// The following code extracts target's peer ID from the
-		// given multiaddress
-		ipfsaddr, err := ma.NewMultiaddr(*target)
-		if err != nil {
-			log.Fatalln(err)
-		}
-
-		pid, err := ipfsaddr.ValueForProtocol(ma.P_IPFS)
-		if err != nil {
-			log.Fatalln(err)
-		}
-
-		peerid, err := peer.IDB58Decode(pid)
-		if err != nil {
-			log.Fatalln(err)
-		}
-
-		// Decapsulate the /ipfs/<peerID> part from the target
-		// /ip4/<a.b.c.d>/ipfs/<peer> becomes /ip4/<a.b.c.d>
-		targetPeerAddr, _ := ma.NewMultiaddr(
-			fmt.Sprintf("/ipfs/%s", peer.IDB58Encode(peerid)))
-		targetAddr := ipfsaddr.Decapsulate(targetPeerAddr)
-
-		// We have a peer ID and a targetAddr so we add it to the peerstore
-		// so LibP2P knows how to contact it
-		ha.Peerstore().AddAddr(peerid, targetAddr, pstore.PermanentAddrTTL)
-
-		log.Println("opening stream")
-		// make a new stream from host B to host A
-		// it should be handled on host A by the handler we set above because
-		// we use the same /p2p/1.0.0 protocol
-		s, err := ha.NewStream(context.Background(), peerid, "/p2p/1.0.0")
-		if err != nil {
-			log.Fatalln(err)
-		}
-		// Create a buffered stream so that read and writes are non blocking.
-		rw := bufio.NewReadWriter(bufio.NewReader(s), bufio.NewWriter(s))
-
-		updateBlockchain(rw)
+		bc.ConnectPeer(ha, *target)
 
 	}
 
 	httpPort := *listenF + 1000
 	// run the gorilla/mux server
-	// log.Fatal()
 	run(httpPort)
-	select {}
+	// select {}
 }

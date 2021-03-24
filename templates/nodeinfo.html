@@ -1,42 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
+<!--nodeinfo.html-->
 
-<head>
-    <!-- Required meta tags-->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="au theme template">
-    <meta name="author" content="Hau Nguyen">
-    <meta name="keywords" content="au theme template">
-
-    <!-- Title Page-->
-    <title>Maps</title>
-
-    <!-- Fontfaces CSS-->
-    <link href="/static/css/font-face.css" rel="stylesheet" media="all">
-    <link href="/static/vendor/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" media="all">
-    <link href="/static/vendor/font-awesome-5/css/fontawesome-all.min.css" rel="stylesheet" media="all">
-    <link href="/static/vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
-
-    <!-- Bootstrap CSS-->
-    <link href="/static/vendor/bootstrap-4.1/bootstrap.min.css" rel="stylesheet" media="all">
-
-    <!-- Vendor CSS-->
-    <link href="/static/vendor/animsition/animsition.min.css" rel="stylesheet" media="all">
-    <link href="/static/vendor/bootstrap-progressbar/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet" media="all">
-    <link href="/static/vendor/wow/animate.css" rel="stylesheet" media="all">
-    <link href="/static/vendor/css-hamburgers/hamburgers.min.css" rel="stylesheet" media="all">
-    <link href="/static/vendor/slick/slick.css" rel="stylesheet" media="all">
-    <link href="/static/vendor/select2/select2.min.css" rel="stylesheet" media="all">
-    <link href="/static/vendor/perfect-scrollbar/perfect-scrollbar.css" rel="stylesheet" media="all">
-    <link href="/static/vendor/vector-map/jqvmap.min.css" rel="stylesheet" media="all">
-
-    <!-- Main CSS-->
-    <link href="/static/css/theme.css" rel="stylesheet" media="all">
-
-</head>
-
-<body class="animsition">
+<!--Embed the header.html template at this location-->
+{{ template "header.html" .}}
     <div class="page-wrapper">
         <!-- HEADER MOBILE-->
         {{ template "menu-mobile.html" . }}
@@ -52,79 +17,81 @@
             {{ template "menu.html" . }}
             <!-- HEADER DESKTOP-->
 
+            <!-- MAIN CONTENT-->
             <div class="main-content">
                 <div class="section__content section__content--p30">
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="col-md-12">
-                                <!-- MAP DATA-->
-                                <div class="map-data m-b-40">
-                                    <h3 class="title-3 m-b-30">
-                                        <i class="zmdi zmdi-map"></i>Node Map</h3>
-                                    <div class="map-wrap m-t-45 m-b-20">
-                                        <div id="vmap" style="height: 284px;"></div>
+                            <div class="col-lg-12">
+                                <div class="top-campaign">
+                                    <h3 class="title-3 m-b-30">My Node Info</h3>
+                                    <div class="table-responsive">
+                                        <table class="table table-top-campaign">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Node ID</td>
+                                                    <td>{{ .NodeId }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Node Address</td>
+                                                    <td>{{ .NodeAddress }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
-                                <!-- END MAP DATA-->
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-9">
-                                <div class="table-responsive table--no-card m-b-30">
-                                    <table class="table table-borderless table-striped table-earning">
+                            <div class="col-md-12">
+                                <h3 class="title-5 m-b-35">data table</h3>
+                                <div class="table-data__tool">
+                                    <div class="table-data__tool-left">
+                                        <div class="rs-select2--md">
+                                            
+                                        </div>
+                                        <div class="rs-select2--sm">
+                                            
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="table-data__tool-right">
+                                        <div class="rs-select2--sm">
+                                            
+                                        </div>
+                                        <button class="au-btn au-btn-icon au-btn--green au-btn--small">
+                                        <i class="zmdi zmdi-plus"></i>add node</button>
+                                    </div>
+                                </div>
+                                <div class="table-responsive table-responsive-data2">
+                                    <table class="table table-data2">
                                         <thead>
                                             <tr>
-                                                <th>Location</th>
-                                                <th>Latency</th>
-                                                <th>Peer Id</th>
-                                                <th class="text-right">Connection</th>
-                                                <th class="text-right">Notes</th>
+                                                <th>Peer ID</th>
+                                                <th>Addresses</th>
+                                                <th>Public Key</th>
+                                                <th>Protocols</th>
+                                                <th>Ping</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>Local Network</td>
-                                                <td>8 ms</td>
-                                                <td>QmYy...jhx5N</td>
-                                                <td class="text-right">ip4 . tcp</td>
-                                                <td class="text-right"></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Local Network</td>
-                                                <td>2 ms</td>
-                                                <td>xE4y...Lak7s</td>
-                                                <td class="text-right">ip4 . tcp</td>
-                                                <td class="text-right"></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Local Network</td>
-                                                <td>5 ms</td>
-                                                <td>QmxH...S4kl3</td>
-                                                <td class="text-right">ip4 . tcp</td>
-                                                <td class="text-right"></td>
-                                            </tr>
+                                            {{ range .PeerData }}
+                                                
+                                                <tr class="tr-shadow">
+                                                    <td>
+                                                        <span class="block-email">{{.PeerID}}</span>
+                                                    </td>
+                                                    <td>{{.Addrs}}</td>
+                                                    <td>{{.PublicKey}}</td>
+                                                    <td class="desc">{{.Protocals}}</td>
+                                                    <td>
+                                                        <span class="status--process">{{.Ping}}</span>
+                                                    </td>
+                                                </tr>
+                                                <tr class="spacer"></tr>
+                                            {{ end }}
                                         </tbody>
                                     </table>
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="au-card au-card--bg-blue au-card-top-countries m-b-30">
-                                    <div class="au-card-inner">
-                                        <div class="table-responsive">
-                                            <table class="table table-top-countries">
-                                                <tbody>
-                                                    <tr>
-                                                        <td>ZdcF...Ss3Fs</td>
-                                                        <td class="text-right">ip4 . tcp</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>QmcD...2Ds5g</td>
-                                                        <td class="text-right">ip4 . tcp</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -142,41 +109,5 @@
 
     </div>
 
-    <!-- Jquery JS-->
-    <script src="/static/vendor/jquery-3.2.1.min.js"></script>
-    <!-- Bootstrap JS-->
-    <script src="/static/vendor/bootstrap-4.1/popper.min.js"></script>
-    <script src="/static/vendor/bootstrap-4.1/bootstrap.min.js"></script>
-    <!-- Vendor JS       -->
-    <script src="/static/vendor/slick/slick.min.js">
-    </script>
-    <script src="/static/vendor/wow/wow.min.js"></script>
-    <script src="/static/vendor/animsition/animsition.min.js"></script>
-    <script src="/static/vendor/bootstrap-progressbar/bootstrap-progressbar.min.js">
-    </script>
-    <script src="/static/vendor/counter-up/jquery.waypoints.min.js"></script>
-    <script src="/static/vendor/counter-up/jquery.counterup.min.js">
-    </script>
-    <script src="/static/vendor/circle-progress/circle-progress.min.js"></script>
-    <script src="/static/vendor/perfect-scrollbar/perfect-scrollbar.js"></script>
-    <script src="/static/vendor/chartjs/Chart.bundle.min.js"></script>
-    <script src="/static/vendor/select2/select2.min.js">
-    </script>
-    <script src="/static/vendor/vector-map/jquery.vmap.js"></script>
-    <script src="/static/vendor/vector-map/jquery.vmap.min.js"></script>
-    <script src="/static/vendor/vector-map/jquery.vmap.sampledata.js"></script>
-    <script src="/static/vendor/vector-map/jquery.vmap.world.js"></script>
-    <script src="/static/vendor/vector-map/jquery.vmap.brazil.js"></script>
-    <script src="/static/vendor/vector-map/jquery.vmap.europe.js"></script>
-    <script src="/static/vendor/vector-map/jquery.vmap.france.js"></script>
-    <script src="/static/vendor/vector-map/jquery.vmap.germany.js"></script>
-    <script src="/static/vendor/vector-map/jquery.vmap.russia.js"></script>
-    <script src="/static/vendor/vector-map/jquery.vmap.usa.js"></script>
-
-    <!-- Main JS-->
-    <script src="/static/js/main.js"></script>
-
-</body>
-
-</html>
-<!-- end document-->
+<!--Embed the footer.html template at this location-->
+{{ template "footer.html" .}}

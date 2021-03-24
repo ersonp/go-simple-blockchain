@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// run is used to start the go gin http server
 func run(httpPort int) {
 	// Set Gin to production mode
 	gin.SetMode(gin.ReleaseMode)
@@ -23,6 +24,6 @@ func run(httpPort int) {
 	server.InitializeRoutes()
 
 	// Start serving the application
-	log.Fatal(server.Router.Run(":" + strconv.Itoa(httpPort)))
 	log.Println("HTTP Server Listening on port :", httpPort)
+	log.Fatal(server.Router.Run(":" + strconv.Itoa(httpPort)))
 }
